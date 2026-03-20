@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compétences — Elian MARTINOT</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .skills-categories {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+      margin-bottom: 4rem;
+    }
+
+    .skill-category {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 1.8rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-category::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .skill-category:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+    }
+
+    .skill-category:hover::before { opacity: 1; }
+
+    .skill-cat-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .skill-cat-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: 1.4rem;
+    }
+
+    .skill-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .skill-name {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .skill-level {
+      display: flex;
+      gap: 3px;
+    }
+
+    .skill-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(99,120,180,0.2);
+      transition: background 0.3s;
+    }
+
+    .skill-dot.filled { background: var(--violet-light); box-shadow: 0 0 4px rgba(157,95,255,0.5); }
+    .skill-dot.expert { background: var(--cyan); box-shadow: 0 0 4px rgba(34,211,238,0.5); }
+
+    /* LÉGENDE NIVEAUX */
+    .skill-legend {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-dots {
+      display: flex;
+      gap: 2px;
+    }
+
+    /* CERTIFICATIONS */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .cert-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: all 0.3s;
+    }
+
+    .cert-card:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+    }
+
+    .cert-badge {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: var(--violet-glow);
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .cert-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+    }
+
+    .cert-org {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .cert-status {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.25);
+      color: var(--success);
+    }
+
+    .cert-status.ongoing {
+      background: rgba(245,158,11,0.12);
+      border-color: rgba(245,158,11,0.25);
+      color: var(--warning);
+    }
+
+    @media (max-width: 900px) {
+      .skills-categories { grid-template-columns: 1fr 1fr; }
+      .certs-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .skills-categories { grid-template-columns: 1fr; }
+      .certs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">[E<span>.</span>M]</a>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">⌂</span> Accueil</a></li>
+        <li><a href="about.html"><span class="nav-icon">◉</span> Profil</a></li>
+        <li><a href="skills.html"><span class="nav-icon">◈</span> Compétences</a></li>
+        <li><a href="projects.html"><span class="nav-icon">◫</span> Projets</a></li>
+        <li><a href="homelab.html"><span class="nav-icon">⬡</span> Lab</a></li>
+        <li><a href="contact.html"><span class="nav-icon">✉</span> Contact</a></li>
+      </ul>
+      <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <div class="page-header-blob"></div>
+      <div class="page-header-grid"></div>
+      <div class="container page-header-inner">
+        <div class="page-breadcrumb">
+          <a href="index.html">Accueil</a>
+          <span class="page-breadcrumb-sep">/</span>
+          <span>Compétences</span>
+        </div>
+        <h1 class="page-title">Compétences</h1>
+        <p class="page-desc">Stack technique organisée par domaine, évaluée honnêtement.</p>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="container">
+
+        <!-- LÉGENDE -->
+        <div class="skill-legend reveal">
+          <span class="legend-label">Niveau :</span>
+          <div class="legend-item">
+            <div class="legend-dots">
+              <div class="skill-dot filled"></div>
+              <div class="skill-dot filled"></div>
+              <div class="skill-dot"></div><div class="skill-dot"></div><div class="skill-dot"></div>
+            </div>
+            Notions
+          </div>
+          <div class="legend-item">
+            <div class="legend-dots">
+              <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+              <div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div>
+            </div>
+            Intermédiaire
+          </div>
+          <div class="legend-item">
+            <div class="legend-dots">
+              <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+              <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+            </div>
+            Avancé
+          </div>
+          <div class="legend-item">
+            <div class="legend-dots">
+              <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+              <div class="skill-dot expert"></div><div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+            </div>
+            Expert
+          </div>
+        </div>
+
+        <!-- CATÉGORIES -->
+        <div class="skills-categories">
+
+          <!-- SYSTÈMES -->
+          <div class="skill-category reveal">
+            <span class="skill-cat-icon">🖥️</span>
+            <div class="skill-cat-title">Systèmes</div>
+            <ul class="skill-list">
+              <li class="skill-item">
+                <span class="skill-name">Linux (Debian/RHEL)</span>
+                <div class="skill-level">
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot filled"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Windows Server</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Active Directory</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Bash / PowerShell</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Python (admin)</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- RÉSEAUX -->
+          <div class="skill-category reveal reveal-delay-1">
+            <span class="skill-cat-icon">🌐</span>
+            <div class="skill-cat-title">Réseaux</div>
+            <ul class="skill-list">
+              <li class="skill-item">
+                <span class="skill-name">TCP/IP, VLAN, Routing</span>
+                <div class="skill-level">
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot filled"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Firewall (pfSense/OPN)</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">VPN (WireGuard/OpenVPN)</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Supervision (Zabbix)</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Cisco IOS</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- CLOUD -->
+          <div class="skill-category reveal reveal-delay-2">
+            <span class="skill-cat-icon">☁️</span>
+            <div class="skill-cat-title">Cloud</div>
+            <ul class="skill-list">
+              <li class="skill-item">
+                <span class="skill-name">AWS (EC2, S3, VPC)</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Azure (AD, VMs)</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Terraform</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Docker / Containers</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- VIRTUALISATION -->
+          <div class="skill-category reveal">
+            <span class="skill-cat-icon">💾</span>
+            <div class="skill-cat-title">Virtualisation</div>
+            <ul class="skill-list">
+              <li class="skill-item">
+                <span class="skill-name">Proxmox VE</span>
+                <div class="skill-level">
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">VMware ESXi</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">KVM / QEMU</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- OUTILS & DEVOPS -->
+          <div class="skill-category reveal reveal-delay-1">
+            <span class="skill-cat-icon">🛠️</span>
+            <div class="skill-cat-title">Outils & DevOps</div>
+            <ul class="skill-list">
+              <li class="skill-item">
+                <span class="skill-name">Git / GitHub</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Ansible</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">CI/CD (GitLab)</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Nginx / Apache</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- MÉTHODOLOGIES -->
+          <div class="skill-category reveal reveal-delay-2">
+            <span class="skill-cat-icon">📋</span>
+            <div class="skill-cat-title">Méthodologies</div>
+            <ul class="skill-list">
+              <li class="skill-item">
+                <span class="skill-name">ITIL v4</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Agile / Scrum</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Documentation technique</span>
+                <div class="skill-level">
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot expert"></div><div class="skill-dot expert"></div>
+                  <div class="skill-dot filled"></div>
+                </div>
+              </li>
+              <li class="skill-item">
+                <span class="skill-name">Gestion de projet</span>
+                <div class="skill-level">
+                  <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+                  <div class="skill-dot filled"></div><div class="skill-dot"></div>
+                  <div class="skill-dot"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div class="section-header reveal">
+          <div class="section-label">Reconnaissances</div>
+          <h2 class="section-title">Certifications</h2>
+        </div>
+
+        <div class="certs-grid">
+          <div class="cert-card reveal">
+            <div class="cert-badge">🏅</div>
+            <div>
+              <div class="cert-name">BACCALAUREAT</div>
+              <div class="cert-org">LGT Henri Matisse · 2021</div>
+              <span class="cert-status">Obtenue</span>
+            </div>
+          </div>
+          <div class="cert-card reveal reveal-delay-1">
+            <div class="cert-badge">🏅</div>
+            <div>
+              <div class="cert-name">BTS SIO option SISR</div>
+              <div class="cert-org">ESICAD · En cours</div>
+              <span class="cert-status ongoing">En cours</span>
+            </div>
+          </div>
+          <div class="cert-card reveal reveal-delay-2">
+            <div class="cert-badge">🎯</div>
+            <div>
+              <div class="cert-name">Master Pro infra</div>
+              <div class="cert-org">Pas d'école défini</div>
+              <span class="cert-status ongoing">Objectif 2029</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-copy">© 2026 Elian MARTINOT</div>
+      <ul class="footer-links">
+        <li><a href="projects.html">Projets →</a></li>
+        <li><a href="homelab.html">Lab →</a></li>
+        <li><a href="contact.html">Contact →</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>

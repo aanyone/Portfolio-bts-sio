@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil — Elian MARTINOT</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .about-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    /* COLONNE GAUCHE */
+    .about-sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .about-avatar-wrap {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--blue-deep), var(--violet));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-accent);
+    }
+
+    .about-avatar-placeholder {
+      font-family: var(--font-display);
+      font-size: 5rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.15);
+    }
+
+    .about-avatar-note {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .about-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .about-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.8rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .about-info-icon {
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .about-info-content {}
+
+    .about-info-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .about-info-value {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      display: block;
+      margin-top: 1px;
+    }
+
+    /* COLONNE DROITE */
+    .about-main {}
+
+    .about-text p {
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+      line-height: 1.8;
+      font-size: 0.97rem;
+    }
+
+    .about-text p strong { color: var(--text-primary); }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* VALEURS / MISSIONS */
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .value-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 1.4rem;
+      transition: all 0.3s;
+    }
+
+    .value-card:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+    }
+
+    .value-icon {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    .value-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .value-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* CENTRE D'INTÉRÊTS */
+    .interests-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .interest-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 0.35rem 0.85rem;
+    }
+
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-sidebar { position: static; }
+      .about-avatar-wrap { width: 200px; }
+    }
+
+    @media (max-width: 600px) {
+      .values-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">[E<span>.</span>M]</a>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">⌂</span> Accueil</a></li>
+        <li><a href="about.html"><span class="nav-icon">◉</span> Profil</a></li>
+        <li><a href="skills.html"><span class="nav-icon">◈</span> Compétences</a></li>
+        <li><a href="projects.html"><span class="nav-icon">◫</span> Projets</a></li>
+        <li><a href="homelab.html"><span class="nav-icon">⬡</span> Lab</a></li>
+        <li><a href="contact.html"><span class="nav-icon">✉</span> Contact</a></li>
+      </ul>
+      <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-blob"></div>
+      <div class="page-header-grid"></div>
+      <div class="container page-header-inner">
+        <div class="page-breadcrumb">
+          <a href="index.html">Accueil</a>
+          <span class="page-breadcrumb-sep">/</span>
+          <span>Profil</span>
+        </div>
+        <h1 class="page-title">À propos</h1>
+        <p class="page-desc">Parcours, valeurs et vision professionnelle.</p>
+      </div>
+    </div>
+
+    <!-- CONTENU -->
+    <div class="page-section">
+      <div class="container">
+        <div class="about-grid">
+
+          <!-- SIDEBAR -->
+          <aside class="about-sidebar reveal">
+            <div class="about-avatar-wrap">
+              <!-- REMPLACEZ PAR : <img src="photo.jpg" alt="[Prénom Nom]" style="width:100%;height:100%;object-fit:cover;"> -->
+              <div class="about-avatar-placeholder">E.M</div>
+            </div>
+
+            <!-- STATS -->
+            <div class="about-stats">
+              <div class="stat-card">
+                <div class="stat-number">2<span>+</span></div>
+                <div class="stat-label">ans expérience</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">12<span>+</span></div>
+                <div class="stat-label">projets</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">8<span>+</span></div>
+                <div class="stat-label">technologies</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">certifications</div>
+              </div>
+            </div>
+
+            <!-- INFOS RAPIDES -->
+            <div class="about-info-list">
+              <div class="about-info-item">
+                <span class="about-info-icon">📍</span>
+                <div class="about-info-content">
+                  <span class="about-info-label">Localisation</span>
+                  <span class="about-info-value">Labège - Occitanie</span>
+                </div>
+              </div>
+              <div class="about-info-item">
+                <span class="about-info-icon">🎓</span>
+                <div class="about-info-content">
+                  <span class="about-info-label">Formation</span>
+                  <span class="about-info-value">BTS SIO — ESICAD</span>
+                </div>
+              </div>
+              <div class="about-info-item">
+                <span class="about-info-icon">💼</span>
+                <div class="about-info-content">
+                  <span class="about-info-label">Statut</span>
+                  <span class="about-info-value">Étudiant-Alternant</span>
+                </div>
+              </div>
+              <div class="about-info-item">
+                <span class="about-info-icon">🌐</span>
+                <div class="about-info-content">
+                  <span class="about-info-label">Langues</span>
+                  <span class="about-info-value">Français · Anglais (B2)</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- CONTENU PRINCIPAL -->
+          <main class="about-main">
+
+            <!-- PRÉSENTATION -->
+            <div class="about-text reveal reveal-delay-1">
+              <div class="section-label">Présentation</div>
+              <h2 class="section-title">Construire l'infrastructure de demain.</h2>
+
+              <!-- ↓ MODIFIEZ CES PARAGRAPHES ↓ -->
+              <p>
+                Depuis 2 ans, je me spécialise dans <strong>l'administration des systèmes
+                et réseaux</strong>, avec un intérêt particulier pour la sécurisation des
+                infrastructures et l'automatisation des processus opérationnels.
+              </p>
+              <p>
+                Actuellement <strong>étudiant en BTS en Alternance</strong>
+                à ESICAD, je combine formation académique rigoureuse et
+                expérience de terrain pour développer une vision complète de l'IT moderne.
+              </p>
+              <p>
+                Mon approche : <strong>comprendre avant d'agir</strong>, documenter
+                systématiquement, et toujours garder la sécurité au cœur des décisions
+                d'architecture. Je crois à l'apprentissage autonome, illustré par
+                mes Projets Personnels en production permanente.
+              </p>
+
+              <div class="about-tags">
+                <span class="tag accent">Linux</span>
+                <span class="tag accent">Réseau TCP/IP</span>
+                <span class="tag accent">Virtualisation</span>
+                <span class="tag">Cloud</span>
+                <span class="tag">Cybersécurité</span>
+                <span class="tag">Scripting</span>
+                <span class="tag">Documentation</span>
+                <span class="tag">ITIL</span>
+              </div>
+
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="contact.html" class="btn-secondary">✉ Me contacter</a>
+              </div>
+            </div>
+
+            <!-- VALEURS / MISSIONS -->
+            <div style="margin-top: 3.5rem;" class="reveal reveal-delay-1">
+              <div class="section-label">Missions & Valeurs</div>
+              <h2 class="section-title">Ce qui me définit</h2>
+
+              <div class="values-grid">
+                <div class="value-card">
+                  <span class="value-icon">🔐</span>
+                  <div class="value-title">Sécurité d'abord</div>
+                  <p class="value-desc">
+                    Chaque architecture que je conçois intègre la sécurité dès la phase
+                    de conception, pas en post-production.
+                  </p>
+                </div>
+                <div class="value-card">
+                  <span class="value-icon">⚡</span>
+                  <div class="value-title">Automatisation</div>
+                  <p class="value-desc">
+                    Tout ce qui peut être automatisé doit l'être. Scripts, playbooks,
+                    pipelines CI/CD — l'efficacité opérationnelle est un objectif constant.
+                  </p>
+                </div>
+                <div class="value-card">
+                  <span class="value-icon">📚</span>
+                  <div class="value-title">Apprentissage continu</div>
+                  <p class="value-desc">
+                    La technologie évolue vite. Mes Projets Personnels et ma veille hebdomadaire
+                    me permettent de me former en continu.
+                  </p>
+                </div>
+                <div class="value-card">
+                  <span class="value-icon">📝</span>
+                  <div class="value-title">Documentation</div>
+                  <p class="value-desc">
+                    Une infra non documentée est une infra fragile. Je documente
+                    systématiquement procédures, architectures et incidents.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- CENTRES D'INTÉRÊT -->
+            <div style="margin-top: 3.5rem;" class="reveal reveal-delay-2">
+              <div class="section-label">En dehors du travail</div>
+              <h2 class="section-title">Centres d'intérêt</h2>
+              <div class="interests-row">
+                <div class="interest-item">🕹️ CTF & Cybersécurité</div>
+                <div class="interest-item">🖥️ Open Source</div>
+                <div class="interest-item">⚙️ DIY Hardware</div>
+                <div class="interest-item">☁️ Self-hosting</div>
+                <div class="interest-item">📡 Réseau radio amateur</div>
+                <div class="interest-item">🎮 [Votre loisir]</div>
+                <div class="interest-item">📖 [Votre loisir]</div>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-copy">© 2026 Elian MARTINOT</div>
+      <ul class="footer-links">
+        <li><a href="skills.html">Compétences →</a></li>
+        <li><a href="projects.html">Projets →</a></li>
+        <li><a href="contact.html">Contact →</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>

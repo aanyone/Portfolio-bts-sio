@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Elian MARTINOT</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* BLOB AMBIANCE */
+    .contact-ambient {
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .contact-layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    /* COLONNE GAUCHE — infos */
+    .contact-info {}
+
+    .contact-info p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      font-size: 0.97rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-info p strong { color: var(--text-primary); }
+
+    /* DISPONIBILITÉS */
+    .availability-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--card-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .availability-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+    }
+
+    .avail-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .avail-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .avail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .avail-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .avail-check {
+      color: var(--success);
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* LIENS CONTACT DIRECTS */
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .contact-link-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+
+    .contact-link-item:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      transform: translateX(4px);
+    }
+
+    .link-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: var(--violet-glow);
+      border: 1px solid var(--border-accent);
+      flex-shrink: 0;
+    }
+
+    .link-label {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .link-value {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .link-arrow {
+      margin-left: auto;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .contact-link-item:hover .link-arrow { color: var(--violet-light); }
+
+    /* COLONNE DROITE — FORMULAIRE */
+    .contact-form-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 2rem;
+      position: sticky;
+      top: 100px;
+    }
+
+    .form-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: none;
+      width: 100%;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--text-muted); }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--border-accent);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .form-group select {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a5878' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    .form-group select option { background: var(--bg-card); }
+
+    .form-group textarea { min-height: 120px; }
+
+    .form-submit {
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+
+    /* SUCCESS MESSAGE */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .form-success-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+
+    .form-success h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-success p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 900px) {
+      .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-form-wrap { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contact-ambient"></div>
+
+  <nav>
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">[E<span>.</span>M]</a>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">⌂</span> Accueil</a></li>
+        <li><a href="about.html"><span class="nav-icon">◉</span> Profil</a></li>
+        <li><a href="skills.html"><span class="nav-icon">◈</span> Compétences</a></li>
+        <li><a href="projects.html"><span class="nav-icon">◫</span> Projets</a></li>
+        <li><a href="homelab.html"><span class="nav-icon">⬡</span> Lab</a></li>
+        <li><a href="contact.html"><span class="nav-icon">✉</span> Contact</a></li>
+      </ul>
+      <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <div class="page-header-blob"></div>
+      <div class="page-header-grid"></div>
+      <div class="container page-header-inner">
+        <div class="page-breadcrumb">
+          <a href="index.html">Accueil</a>
+          <span class="page-breadcrumb-sep">/</span>
+          <span>Contact</span>
+        </div>
+        <h1 class="page-title">Travaillons ensemble.</h1>
+        <p class="page-desc">Ouvert aux opportunités, projets et échanges techniques.</p>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="container">
+        <div class="contact-layout">
+
+          <!-- INFOS GAUCHE -->
+          <div>
+
+            <!-- TEXTE INTRO -->
+            <div class="reveal">
+              <div class="section-label">Me contacter</div>
+              <h2 class="section-title">Prenons contact.</h2>
+              <p>
+                Que vous souhaitiez me proposer une <strong>opportunité professionnelle</strong>,
+                collaborer sur un <strong>projet technique</strong> ou simplement échanger
+                autour de l'IT, je lis tous les messages et réponds sous 48h.
+              </p>
+            </div>
+
+            <!-- DISPONIBILITÉ -->
+            <div class="availability-card reveal">
+              <div class="avail-header">
+                <div class="avail-dot"></div>
+                Disponibilités actuelles
+              </div>
+              <ul class="avail-list">
+                <!-- Modifiez selon votre situation -->
+                <li class="avail-item">
+                  <span class="avail-check">✓</span>
+                  <span>Alternance — [Période recherchée]</span>
+                </li>
+                <li class="avail-item">
+                  <span class="avail-check">✓</span>
+                  <span>Stage — [Durée / Période]</span>
+                </li>
+                <li class="avail-item">
+                  <span class="avail-check">✓</span>
+                  <span>Missions freelance / ponctuelles</span>
+                </li>
+                <li class="avail-item">
+                  <span class="avail-check">✓</span>
+                  <span>Échanges techniques & mentoring</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- LIENS DIRECTS -->
+            <div class="contact-links reveal reveal-delay-1">
+
+              <!-- EMAIL — modifiez le href -->
+              <a href="mailto:elian.martinot@gmail.com" class="contact-link-item">
+                <div class="link-icon">✉</div>
+                <div>
+                  <span class="link-label">Email</span>
+                  <span class="link-value">elian.martinot@gmail.com</span>
+                </div>
+                <span class="link-arrow">→</span>
+              </a>
+
+              <!-- LINKEDIN — modifiez le href -->
+              <a href="https://linkedin.com/in/[votre-profil]" target="_blank" class="contact-link-item">
+                <div class="link-icon">in</div>
+                <div>
+                  <span class="link-label">LinkedIn</span>
+                  <span class="link-value">linkedin.com/in/[votre-profil]</span>
+                </div>
+                <span class="link-arrow">→</span>
+              </a>
+
+              <!-- GITHUB — modifiez le href -->
+              <a href="https://github.com/[votre-pseudo]" target="_blank" class="contact-link-item">
+                <div class="link-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color: var(--text-secondary)"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                </div>
+                <div>
+                  <span class="link-label">GitHub</span>
+                  <span class="link-value">github.com/[votre-pseudo]</span>
+                </div>
+                <span class="link-arrow">→</span>
+              </a>
+
+              <!-- CV TÉLÉCHARGEMENT -->
+              <a href="[VOTRE_CV.pdf]" download target="_blank" class="contact-link-item">
+                <div class="link-icon">📄</div>
+                <div>
+                  <span class="link-label">Télécharger mon CV</span>
+                  <span class="link-value">Format PDF — 03/2026</span>
+                </div>
+                <span class="link-arrow">↓</span>
+              </a>
+
+            </div>
+          </div>
+
+          <!-- FORMULAIRE DROIT -->
+          <div class="contact-form-wrap reveal reveal-delay-2">
+            <div class="form-title">✉ Envoyer un message</div>
+
+            <div id="contact-form-container">
+              <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)">
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" placeholder="Votre prénom" required />
+                  </div>
+                  <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" placeholder="Votre nom" required />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="votre@email.com" required />
+                </div>
+
+                <div class="form-group">
+                  <label>Société / Organisation</label>
+                  <input type="text" placeholder="(optionnel)" />
+                </div>
+
+                <div class="form-group">
+                  <label>Type de demande</label>
+                  <select>
+                    <option value="">— Sélectionner —</option>
+                    <option>Proposition d'alternance</option>
+                    <option>Proposition de stage</option>
+                    <option>Mission freelance</option>
+                    <option>Collaboration technique</option>
+                    <option>Échange / Question</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Message</label>
+                  <textarea placeholder="Décrivez votre projet, opportunité ou votre question…" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary form-submit">
+                  Envoyer → 
+                </button>
+
+              </form>
+            </div>
+
+            <!-- SUCCESS STATE -->
+            <div class="form-success" id="form-success">
+              <div class="form-success-icon">✅</div>
+              <h3>Message envoyé !</h3>
+              <p>Merci pour votre message. Je vous répondrai dans les 48h.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-copy">© 2026 Elian MARTINOT</div>
+      <ul class="footer-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="about.html">Profil</a></li>
+        <li><a href="projects.html">Projets</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('contact-form').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+
+      /* Pour intégrer un vrai backend, remplacez ce bloc par un fetch() vers
+         votre endpoint (Formspree, Netlify Forms, ou votre propre API). */
+    }
+  </script>
+</body>
+</html>

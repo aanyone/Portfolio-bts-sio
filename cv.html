@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV — [Prénom Nom]</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* RÉSUMÉ TOP */
+    .cv-summary {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--card-radius);
+      padding: 2rem;
+      margin-bottom: 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cv-summary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+    }
+
+    .cv-summary-text {
+      font-size: 0.97rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 700px;
+    }
+
+    .cv-summary-text strong { color: var(--text-primary); }
+
+    /* LAYOUT 2 COLONNES */
+    .cv-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    /* TITRES COLONNES */
+    .cv-col-header {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .cv-col-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* TIMELINE */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 1.2rem;
+      position: relative;
+    }
+
+    .tl-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 28px;
+      flex-shrink: 0;
+    }
+
+    .tl-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--violet);
+      border: 2px solid var(--bg-base);
+      box-shadow: 0 0 8px rgba(124,58,237,0.5);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .tl-line {
+      width: 1px;
+      flex: 1;
+      background: var(--border);
+      min-height: 20px;
+    }
+
+    .tl-content {
+      padding-bottom: 2.2rem;
+      flex: 1;
+    }
+
+    .tl-date {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--violet-light);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.25rem;
+    }
+
+    .tl-role {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-primary);
+      margin-bottom: 0.15rem;
+    }
+
+    .tl-org {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tl-type-badge {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      background: var(--violet-glow);
+      border: 1px solid var(--border-accent);
+      color: var(--text-accent);
+    }
+
+    .tl-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .tl-desc ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 0;
+    }
+
+    .tl-desc ul li::before {
+      content: '→ ';
+      color: var(--violet-light);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+    }
+
+    .tl-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.7rem;
+    }
+
+    /* CERTIFICATIONS */
+    .certs-section {
+      margin-top: 3.5rem;
+    }
+
+    .cert-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+      transition: all 0.2s;
+    }
+
+    .cert-row:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+    }
+
+    .cert-left {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .cert-icon {
+      font-size: 1rem;
+    }
+
+    .cert-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .cert-org {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .cert-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .cert-badge.obtained {
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.25);
+      color: var(--success);
+    }
+
+    .cert-badge.ongoing {
+      background: rgba(245,158,11,0.12);
+      border: 1px solid rgba(245,158,11,0.25);
+      color: var(--warning);
+    }
+
+    /* COMPÉTENCES CLÉS résumé */
+    .skills-summary {
+      margin-top: 3.5rem;
+    }
+
+    .skills-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .skill-chip {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 99px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .skill-chip:hover {
+      border-color: var(--border-accent);
+      color: var(--text-accent);
+      background: var(--violet-glow);
+    }
+
+    /* TÉLÉCHARGER */
+    .cv-download-bar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--card-radius);
+      padding: 1.8rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .cv-download-text h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.3rem;
+    }
+
+    .cv-download-text p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 900px) {
+      .cv-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">[P<span>.</span>N]</a>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">⌂</span> Accueil</a></li>
+        <li><a href="about.html"><span class="nav-icon">◉</span> Profil</a></li>
+        <li><a href="skills.html"><span class="nav-icon">◈</span> Compétences</a></li>
+        <li><a href="projects.html"><span class="nav-icon">◫</span> Projets</a></li>
+        <li><a href="homelab.html"><span class="nav-icon">⬡</span> Lab</a></li>
+        <li><a href="cv.html"><span class="nav-icon">◷</span> CV</a></li>
+        <li><a href="contact.html"><span class="nav-icon">✉</span> Contact</a></li>
+      </ul>
+      <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <div class="page-header-blob"></div>
+      <div class="page-header-grid"></div>
+      <div class="container page-header-inner">
+        <div class="page-breadcrumb">
+          <a href="index.html">Accueil</a>
+          <span class="page-breadcrumb-sep">/</span>
+          <span>CV</span>
+        </div>
+        <h1 class="page-title">Curriculum Vitae</h1>
+        <p class="page-desc">Expériences, formations et certifications.</p>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="container">
+
+        <!-- RÉSUMÉ PROFESSIONNEL -->
+        <div class="cv-summary reveal">
+          <div class="section-label" style="margin-bottom: 0.8rem;">Résumé professionnel</div>
+          <p class="cv-summary-text">
+            <!-- MODIFIEZ CE TEXTE -->
+            [Prénom Nom], <strong>[votre rôle / spécialité]</strong> avec [X] ans d'expérience
+            dans l'administration des systèmes et réseaux. Spécialisé dans
+            <strong>[domaine 1]</strong>, <strong>[domaine 2]</strong> et <strong>[domaine 3]</strong>.
+            Actuellement [statut] à [établissement/entreprise], je combine une approche
+            rigoureuse de la sécurité avec une culture forte de l'automatisation et de la documentation.
+          </p>
+        </div>
+
+        <div class="cv-layout">
+
+          <!-- COLONNE EXPÉRIENCES -->
+          <div class="reveal">
+            <div class="cv-col-header">💼 Expériences professionnelles</div>
+            <div class="timeline">
+
+              <!-- EXP 1 — Modifiez -->
+              <div class="timeline-item">
+                <div class="tl-left">
+                  <div class="tl-dot"></div>
+                  <div class="tl-line"></div>
+                </div>
+                <div class="tl-content">
+                  <div class="tl-date">[Mois Année] — [Mois Année / Présent]</div>
+                  <div class="tl-role">[Intitulé du poste]</div>
+                  <div class="tl-org">
+                    [Nom de l'entreprise] · [Ville]
+                    <span class="tl-type-badge">[Alternance / CDI / Stage]</span>
+                  </div>
+                  <div class="tl-desc">
+                    <ul>
+                      <li>[Mission ou réalisation principale #1]</li>
+                      <li>[Mission ou réalisation principale #2]</li>
+                      <li>[Mission ou réalisation principale #3]</li>
+                    </ul>
+                  </div>
+                  <div class="tl-tech">
+                    <span class="tech-badge">[Tech 1]</span>
+                    <span class="tech-badge">[Tech 2]</span>
+                    <span class="tech-badge">[Tech 3]</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- EXP 2 — Modifiez -->
+              <div class="timeline-item">
+                <div class="tl-left">
+                  <div class="tl-dot"></div>
+                  <div class="tl-line"></div>
+                </div>
+                <div class="tl-content">
+                  <div class="tl-date">[Mois Année] — [Mois Année]</div>
+                  <div class="tl-role">[Intitulé du poste]</div>
+                  <div class="tl-org">
+                    [Nom de l'entreprise] · [Ville]
+                    <span class="tl-type-badge">[Stage]</span>
+                  </div>
+                  <div class="tl-desc">
+                    <ul>
+                      <li>[Mission principale]</li>
+                      <li>[Mission principale]</li>
+                    </ul>
+                  </div>
+                  <div class="tl-tech">
+                    <span class="tech-badge">[Tech]</span>
+                    <span class="tech-badge">[Tech]</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- EXP 3 — Modifiez -->
+              <div class="timeline-item">
+                <div class="tl-left">
+                  <div class="tl-dot"></div>
+                  <div class="tl-line"></div>
+                </div>
+                <div class="tl-content">
+                  <div class="tl-date">[Mois Année] — [Mois Année]</div>
+                  <div class="tl-role">[Intitulé du poste]</div>
+                  <div class="tl-org">
+                    [Nom de l'entreprise] · [Ville]
+                    <span class="tl-type-badge">[Stage]</span>
+                  </div>
+                  <div class="tl-desc">
+                    <ul>
+                      <li>[Mission principale]</li>
+                    </ul>
+                  </div>
+                  <div class="tl-tech">
+                    <span class="tech-badge">[Tech]</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- COLONNE FORMATIONS -->
+          <div class="reveal reveal-delay-1">
+            <div class="cv-col-header">🎓 Formations</div>
+            <div class="timeline">
+
+              <!-- FORMATION 1 — Modifiez -->
+              <div class="timeline-item">
+                <div class="tl-left">
+                  <div class="tl-dot"></div>
+                  <div class="tl-line"></div>
+                </div>
+                <div class="tl-content">
+                  <div class="tl-date">[Année] — [Année / Présent]</div>
+                  <div class="tl-role">[Diplôme complet]</div>
+                  <div class="tl-org">
+                    [Établissement] · [Ville]
+                    <span class="tl-type-badge">[En cours / Obtenu]</span>
+                  </div>
+                  <div class="tl-desc">
+                    Spécialité : [Votre spécialité]<br/>
+                    [Option : mention, résultat, projet de fin d'études]
+                  </div>
+                </div>
+              </div>
+
+              <!-- FORMATION 2 — Modifiez -->
+              <div class="timeline-item">
+                <div class="tl-left">
+                  <div class="tl-dot"></div>
+                  <div class="tl-line"></div>
+                </div>
+                <div class="tl-content">
+                  <div class="tl-date">[Année] — [Année]</div>
+                  <div class="tl-role">[Diplôme]</div>
+                  <div class="tl-org">
+                    [Établissement] · [Ville]
+                    <span class="tl-type-badge">Obtenu</span>
+                  </div>
+                  <div class="tl-desc">
+                    Mention : [Bien / Très bien / Passable]
+                  </div>
+                </div>
+              </div>
+
+              <!-- FORMATION 3 — Modifiez -->
+              <div class="timeline-item">
+                <div class="tl-left">
+                  <div class="tl-dot"></div>
+                  <div class="tl-line"></div>
+                </div>
+                <div class="tl-content">
+                  <div class="tl-date">[Année]</div>
+                  <div class="tl-role">Baccalauréat [Série]</div>
+                  <div class="tl-org">
+                    [Lycée] · [Ville]
+                    <span class="tl-type-badge">Obtenu</span>
+                  </div>
+                  <div class="tl-desc">
+                    Spécialités : [Tech/NSI/Maths…]
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- CERTIFICATIONS -->
+            <div class="certs-section">
+              <div class="cv-col-header">🏅 Certifications</div>
+
+              <!-- CERT 1 — Modifiez -->
+              <div class="cert-row">
+                <div class="cert-left">
+                  <span class="cert-icon">🏅</span>
+                  <div>
+                    <span class="cert-name">[Nom de la certification]</span>
+                    <span class="cert-org">[Organisme] · [Année]</span>
+                  </div>
+                </div>
+                <span class="cert-badge obtained">Obtenue</span>
+              </div>
+
+              <!-- CERT 2 — Modifiez -->
+              <div class="cert-row">
+                <div class="cert-left">
+                  <span class="cert-icon">🎯</span>
+                  <div>
+                    <span class="cert-name">[Nom de la certification en cours]</span>
+                    <span class="cert-org">[Organisme] · Préparation</span>
+                  </div>
+                </div>
+                <span class="cert-badge ongoing">En cours</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COMPÉTENCES CLÉS -->
+        <div class="skills-summary reveal">
+          <div class="section-label">Résumé technique</div>
+          <h2 class="section-title">Compétences clés</h2>
+          <div class="skills-chips">
+            <span class="skill-chip">Linux</span>
+            <span class="skill-chip">Windows Server</span>
+            <span class="skill-chip">Active Directory</span>
+            <span class="skill-chip">TCP/IP / VLAN</span>
+            <span class="skill-chip">Firewall</span>
+            <span class="skill-chip">VPN</span>
+            <span class="skill-chip">Proxmox</span>
+            <span class="skill-chip">VMware</span>
+            <span class="skill-chip">Docker</span>
+            <span class="skill-chip">AWS</span>
+            <span class="skill-chip">Terraform</span>
+            <span class="skill-chip">Ansible</span>
+            <span class="skill-chip">Git</span>
+            <span class="skill-chip">Bash / Python</span>
+            <span class="skill-chip">ITIL</span>
+            <span class="skill-chip">Documentation</span>
+          </div>
+        </div>
+
+        <!-- TÉLÉCHARGEMENT -->
+        <div class="cv-download-bar reveal">
+          <div class="cv-download-text">
+            <h3>📄 CV complet au format PDF</h3>
+            <p>Version téléchargeable — mise à jour [Mois Année]</p>
+          </div>
+          <a href="[VOTRE_CV.pdf]" target="_blank" class="btn-primary" download>
+            ↓ Télécharger le CV (PDF)
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-copy">© 2025 [Prénom Nom]</div>
+      <ul class="footer-links">
+        <li><a href="projects.html">Projets →</a></li>
+        <li><a href="contact.html">Contact →</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>

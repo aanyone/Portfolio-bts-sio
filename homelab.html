@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homelab — Elian MARTINOT</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* INTRO LAB */
+    .lab-intro {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 3rem;
+      align-items: start;
+      margin-bottom: 4rem;
+    }
+
+    .lab-specs {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 1.8rem;
+    }
+
+    .lab-specs-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lab-specs-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+
+    .spec-row:last-child { border-bottom: none; }
+
+    .spec-key {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .spec-val {
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .spec-val.highlight { color: var(--cyan); }
+
+    /* GRID CARDS */
+    .homelab-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.3rem;
+    }
+
+    .lab-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 1.6rem;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .lab-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      border-radius: var(--card-radius) var(--card-radius) 0 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .lab-card:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+    }
+
+    .lab-card:hover::before { opacity: 1; }
+
+    .lab-icon-wrap {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      background: var(--violet-glow);
+      border: 1px solid var(--border-accent);
+    }
+
+    .lab-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .lab-description {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .lab-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+
+    .lab-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--success);
+    }
+
+    .lab-status::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    .lab-status.in-progress { color: var(--warning); }
+    .lab-status.in-progress::before { background: var(--warning); box-shadow: 0 0 6px var(--warning); }
+
+    .lab-status.planned { color: var(--text-muted); }
+    .lab-status.planned::before { background: var(--text-muted); box-shadow: none; }
+
+    .lab-tags {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    /* ARCHITECTURE DIAGRAM (texte) */
+    .lab-architecture {
+      margin-top: 4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 2rem;
+    }
+
+    .arch-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .arch-schema {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 2;
+      overflow-x: auto;
+      white-space: pre;
+      padding: 1.2rem;
+      background: var(--bg-base);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .arch-schema .highlight { color: var(--cyan); }
+    .arch-schema .accent { color: var(--violet-light); }
+
+    @media (max-width: 900px) {
+      .lab-intro { grid-template-columns: 1fr; }
+      .homelab-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .homelab-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">[E<span>.</span>M]</a>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">⌂</span> Accueil</a></li>
+        <li><a href="about.html"><span class="nav-icon">◉</span> Profil</a></li>
+        <li><a href="skills.html"><span class="nav-icon">◈</span> Compétences</a></li>
+        <li><a href="projects.html"><span class="nav-icon">◫</span> Projets</a></li>
+        <li><a href="homelab.html"><span class="nav-icon">⬡</span> Lab</a></li>
+        <li><a href="contact.html"><span class="nav-icon">✉</span> Contact</a></li>
+      </ul>
+      <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <div class="page-header-blob"></div>
+      <div class="page-header-grid"></div>
+      <div class="container page-header-inner">
+        <div class="page-breadcrumb">
+          <a href="index.html">Accueil</a>
+          <span class="page-breadcrumb-sep">/</span>
+          <span>Lab Personnel</span>
+        </div>
+        <h1 class="page-title">Homelab</h1>
+        <p class="page-desc">Mon laboratoire d'expérimentation technique — infrastructure réelle, apprentissage autonome permanent.</p>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="container">
+
+        <!-- INTRO + SPECS -->
+        <div class="lab-intro">
+          <div class="reveal">
+            <div class="section-label">Philosophie</div>
+            <h2 class="section-title">Apprendre en faisant.</h2>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.2rem; font-size: 0.97rem;">
+              Mon homelab est un environnement de production personnel où je teste,
+              casse et répare des infrastructures réelles. C'est mon bac à sable pour
+              <strong style="color: var(--text-primary);">expérimenter sans risque</strong>
+              les technologies que j'applique en entreprise.
+            </p>
+            <p style="color: var(--text-secondary); line-height: 1.8; font-size: 0.97rem;">
+              Chaque service hébergé, chaque panne résolue et chaque automatisation
+              déployée consolide une compétence pratique que la formation seule
+              ne peut pas donner.
+            </p>
+          </div>
+
+          <!-- SPECS HARDWARE — modifiez -->
+          <div class="lab-specs reveal reveal-delay-1">
+            <div class="lab-specs-title">⚙️ Hardware</div>
+            <div class="spec-row">
+              <span class="spec-key">Serveur principal</span>
+              <span class="spec-val highlight">[Modèle / Config]</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">CPU</span>
+              <span class="spec-val">[Ex: Intel Xeon / Ryzen 9]</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">RAM</span>
+              <span class="spec-val highlight">[Ex: 64 GB ECC]</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Stockage</span>
+              <span class="spec-val">[Ex: 2 TB NVMe + 8 TB HDD]</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Réseau</span>
+              <span class="spec-val">[Ex: 1 Gbit, VLAN managé]</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Hyperviseur</span>
+              <span class="spec-val highlight">Proxmox VE</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Firewall</span>
+              <span class="spec-val">[OPNsense / pfSense]</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">UPS</span>
+              <span class="spec-val">[Oui / Non — modèle]</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTIONS LAB -->
+        <div class="section-header reveal">
+          <div class="section-label">Expérimentations</div>
+          <h2 class="section-title">Projets actifs</h2>
+        </div>
+
+        <div class="homelab-grid">
+
+          <!-- VIRTUALISATION -->
+          <div class="lab-card reveal">
+            <div class="lab-icon-wrap">⚡</div>
+            <div class="lab-title">Cluster Proxmox</div>
+            <p class="lab-description">
+              Infrastructure de virtualisation sur [X] nœuds.
+              Hébergement de [X] VMs et containers LXC.
+              Snapshots automatisés, HA pour les services critiques.
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status">Actif</div>
+              <div class="lab-tags">
+                <span class="tech-badge">Proxmox</span>
+                <span class="tech-badge">LXC</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RÉSEAU -->
+          <div class="lab-card reveal reveal-delay-1">
+            <div class="lab-icon-wrap">🌐</div>
+            <div class="lab-title">Réseau segmenté</div>
+            <p class="lab-description">
+              VLANs séparés (admin, IoT, DMZ, trusted).
+              Firewall OPNsense avec règles strictes et IDS/IPS Suricata en supervision.
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status">Actif</div>
+              <div class="lab-tags">
+                <span class="tech-badge">VLAN</span>
+                <span class="tech-badge">OPNsense</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MONITORING -->
+          <div class="lab-card reveal reveal-delay-2">
+            <div class="lab-icon-wrap">📊</div>
+            <div class="lab-title">Stack supervision</div>
+            <p class="lab-description">
+              Monitoring centralisé avec [Zabbix / Grafana / Prometheus].
+              Dashboards temps réel, alertes mail/Telegram, métriques système.
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status">Actif</div>
+              <div class="lab-tags">
+                <span class="tech-badge">Grafana</span>
+                <span class="tech-badge">Prometheus</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CYBERSÉCURITÉ -->
+          <div class="lab-card reveal">
+            <div class="lab-icon-wrap">🛡️</div>
+            <div class="lab-title">Lab Cybersécurité</div>
+            <p class="lab-description">
+              Réseau isolé pour CTF, pentest et analyse de malwares.
+              Kali Linux, machines vulnérables (Metasploitable, DVWA, HackTheBox).
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status in-progress">En cours</div>
+              <div class="lab-tags">
+                <span class="tech-badge">Kali</span>
+                <span class="tech-badge">CTF</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AUTOMATISATION -->
+          <div class="lab-card reveal reveal-delay-1">
+            <div class="lab-icon-wrap">🤖</div>
+            <div class="lab-title">Automatisation Ansible</div>
+            <p class="lab-description">
+              Playbooks pour le déploiement automatisé de services,
+              configuration des hôtes, mises à jour et maintenance des VMs.
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status">Actif</div>
+              <div class="lab-tags">
+                <span class="tech-badge">Ansible</span>
+                <span class="tech-badge">YAML</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SELF-HOSTED -->
+          <div class="lab-card reveal reveal-delay-2">
+            <div class="lab-icon-wrap">🏠</div>
+            <div class="lab-title">Services auto-hébergés</div>
+            <p class="lab-description">
+              Nextcloud, Vaultwarden, Gitea, Jellyfin, Uptime Kuma…
+              Gestion complète de mes données, zéro dépendance cloud tiers.
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status">Actif</div>
+              <div class="lab-tags">
+                <span class="tech-badge">Docker</span>
+                <span class="tech-badge">Traefik</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BACKUP -->
+          <div class="lab-card reveal">
+            <div class="lab-icon-wrap">💾</div>
+            <div class="lab-title">Stratégie de sauvegarde</div>
+            <p class="lab-description">
+              Règle 3-2-1 : 3 copies, 2 supports différents, 1 hors site.
+              Backups automatisés avec Proxmox Backup Server + [solution cloud].
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status">Actif</div>
+              <div class="lab-tags">
+                <span class="tech-badge">PBS</span>
+                <span class="tech-badge">Rsync</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLOUD PRIVÉ -->
+          <div class="lab-card reveal reveal-delay-1">
+            <div class="lab-icon-wrap">☁️</div>
+            <div class="lab-title">Cloud hybride</div>
+            <p class="lab-description">
+              Expérimentation cloud hybride : VPN site-to-site entre homelab
+              et instance VPS/cloud. Réplication de services critiques.
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status in-progress">En cours</div>
+              <div class="lab-tags">
+                <span class="tech-badge">WireGuard</span>
+                <span class="tech-badge">VPS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FUTUR -->
+          <div class="lab-card reveal reveal-delay-2">
+            <div class="lab-icon-wrap">🎯</div>
+            <div class="lab-title">[Prochain projet]</div>
+            <p class="lab-description">
+              [Décrivez votre prochain projet de lab : Kubernetes, SIEM, SDN,
+              NAS cluster, home automation, etc.]
+            </p>
+            <div class="lab-footer">
+              <div class="lab-status planned">Planifié</div>
+              <div class="lab-tags">
+                <span class="tech-badge">[Tech]</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ARCHITECTURE SCHÉMA -->
+        <div class="lab-architecture reveal" style="margin-top: 3rem;">
+          <div class="arch-title">🗺️ Architecture réseau (schéma simplifié)</div>
+          <div class="arch-schema">
+<!--  INTERNET
+      │
+      ▼
+  [FAI Box/Modem]
+      │
+      ▼
+  [OPNsense Firewall] ──── DMZ VLAN ──── [Reverse Proxy Traefik]
+      │
+      ├── VLAN Admin (10.0.10.0/24) ──── [Proxmox] ──── VMs / LXC
+      │
+      ├── VLAN Trusted (10.0.20.0/24) ── [NAS] ──── [Backup Server]
+      │
+      ├── VLAN IoT (10.0.30.0/24) ─────── [Home Assistant]
+      │
+      └── VLAN Lab Cyber (10.0.99.0/24) ─ [Kali] ──── [Machines vulnérables]
+
+  MODIFIEZ CE SCHÉMA selon votre architecture réelle
+-->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-copy">© 2026 Elian MARTINOT</div>
+      <ul class="footer-links">
+        <li><a href="projects.html">Projet →</a></li>
+        <li><a href="contact.html">Contact →</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projets — Elian MARTINOT</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* TABS */
+    .projects-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.3rem;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.4rem;
+      border-radius: 5px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--violet);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(124,58,237,0.35);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* GRID */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-4px);
+      background: var(--bg-card-hover);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .project-card:hover::after { opacity: 1; }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .project-num {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--violet-light);
+      opacity: 0.5;
+    }
+
+    .project-link-icon {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .project-link-icon:hover { color: var(--violet-light); }
+
+    .project-context {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--cyan);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .project-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+
+    .project-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .project-row {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    .project-row-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--violet-light);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      min-width: 80px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .project-row-value {
+      color: var(--text-secondary);
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* PROJET FEATURED (carte large) */
+    .project-card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .featured-visual {
+      height: 200px;
+      background: linear-gradient(135deg, var(--blue-deep), var(--violet-glow));
+      border-radius: 10px;
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: rgba(255,255,255,0.2);
+    }
+
+    @media (max-width: 900px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-column: auto; grid-template-columns: 1fr; }
+      .featured-visual { height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">[E<span>.</span>M]</a>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">⌂</span> Accueil</a></li>
+        <li><a href="about.html"><span class="nav-icon">◉</span> Profil</a></li>
+        <li><a href="skills.html"><span class="nav-icon">◈</span> Compétences</a></li>
+        <li><a href="projects.html"><span class="nav-icon">◫</span> Projets</a></li>
+        <li><a href="homelab.html"><span class="nav-icon">⬡</span> Lab</a></li>
+        <li><a href="contact.html"><span class="nav-icon">✉</span> Contact</a></li>
+      </ul>
+      <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <div class="page-header">
+      <div class="page-header-blob"></div>
+      <div class="page-header-grid"></div>
+      <div class="container page-header-inner">
+        <div class="page-breadcrumb">
+          <a href="index.html">Accueil</a>
+          <span class="page-breadcrumb-sep">/</span>
+          <span>Projets</span>
+        </div>
+        <h1 class="page-title">Projets</h1>
+        <p class="page-desc">Réalisations professionnelles et académiques sélectionnées.</p>
+      </div>
+    </div>
+
+    <div class="page-section">
+      <div class="container">
+
+        <!-- ONGLETS -->
+        <div class="projects-tabs reveal">
+          <button class="tab-btn active" onclick="switchTab(event,'pro')">Professionnels</button>
+          <button class="tab-btn" onclick="switchTab(event,'school')">Scolaires</button>
+        </div>
+
+        <!-- ──────────────────────────────────────
+             PROJETS PROFESSIONNELS
+             Dupliquez .project-card pour chaque projet
+        ────────────────────────────────────── -->
+        <div id="tab-pro" class="tab-panel active">
+          <div class="projects-grid">
+
+            <!-- PROJET FEATURED (à la une) — modifiez -->
+            <div class="project-card featured reveal">
+              <div class="featured-visual">⚡</div>
+              <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+                <div class="project-header">
+                  <span class="project-num">01 · Featured</span>
+                  <a href="#" class="project-link-icon">↗</a>
+                </div>
+                <div class="project-context">Contexte entreprise · [Année]</div>
+                <h3 class="project-title">[Nom du Projet Phare]</h3>
+                <div class="project-body">
+                  <div class="project-row">
+                    <span class="project-row-label">Objectif</span>
+                    <span class="project-row-value">[Décrivez l'objectif principal en 1-2 phrases concises.]</span>
+                  </div>
+                  <div class="project-row">
+                    <span class="project-row-label">Actions</span>
+                    <span class="project-row-value">[Ce que vous avez concrètement réalisé et mis en œuvre.]</span>
+                  </div>
+                  <div class="project-row">
+                    <span class="project-row-label">Résultats</span>
+                    <span class="project-row-value">[Impacts mesurables : gain de temps, réduction d'incidents, etc.]</span>
+                  </div>
+                </div>
+                <div class="project-tech">
+                  <span class="tech-badge">Linux</span>
+                  <span class="tech-badge">Ansible</span>
+                  <span class="tech-badge">Docker</span>
+                  <span class="tech-badge">Nginx</span>
+                  <span class="tech-badge">Monitoring</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PROJET 02 — modifiez -->
+            <div class="project-card reveal">
+              <div class="project-header">
+                <span class="project-num">02</span>
+                <a href="#" class="project-link-icon">↗</a>
+              </div>
+              <div class="project-context">Contexte entreprise · [Année]</div>
+              <h3 class="project-title">[Nom du Projet #2]</h3>
+              <div class="project-body">
+                <div class="project-row">
+                  <span class="project-row-label">Objectif</span>
+                  <span class="project-row-value">[Description de l'objectif.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Actions</span>
+                  <span class="project-row-value">[Actions réalisées.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Résultats</span>
+                  <span class="project-row-value">[Résultats concrets obtenus.]</span>
+                </div>
+              </div>
+              <div class="project-tech">
+                <span class="tech-badge">AWS</span>
+                <span class="tech-badge">Terraform</span>
+                <span class="tech-badge">CI/CD</span>
+              </div>
+            </div>
+
+            <!-- PROJET 03 — modifiez -->
+            <div class="project-card reveal reveal-delay-1">
+              <div class="project-header">
+                <span class="project-num">03</span>
+                <a href="#" class="project-link-icon">↗</a>
+              </div>
+              <div class="project-context">Mission interne · [Année]</div>
+              <h3 class="project-title">[Nom du Projet #3]</h3>
+              <div class="project-body">
+                <div class="project-row">
+                  <span class="project-row-label">Objectif</span>
+                  <span class="project-row-value">[Description de l'objectif.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Actions</span>
+                  <span class="project-row-value">[Actions réalisées.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Résultats</span>
+                  <span class="project-row-value">[Résultats concrets.]</span>
+                </div>
+              </div>
+              <div class="project-tech">
+                <span class="tech-badge">Windows Server</span>
+                <span class="tech-badge">Active Directory</span>
+                <span class="tech-badge">GPO</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ──────────────────────────────────────
+             PROJETS SCOLAIRES
+             Dupliquez .project-card pour chaque projet
+        ────────────────────────────────────── -->
+        <div id="tab-school" class="tab-panel">
+          <div class="projects-grid">
+
+            <!-- PROJET SCOLAIRE S01 — modifiez -->
+            <div class="project-card reveal">
+              <div class="project-header">
+                <span class="project-num">S01</span>
+              </div>
+              <div class="project-context">[Formation / Module] · [Année]</div>
+              <h3 class="project-title">[Nom du Projet Scolaire #1]</h3>
+              <div class="project-body">
+                <div class="project-row">
+                  <span class="project-row-label">Problème</span>
+                  <span class="project-row-value">[La problématique pédagogique posée par le projet.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Approche</span>
+                  <span class="project-row-value">[Votre démarche, méthode utilisée.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Acquis</span>
+                  <span class="project-row-value">[Ce que vous avez appris et les compétences maîtrisées.]</span>
+                </div>
+              </div>
+              <div class="project-tech">
+                <span class="tech-badge">Cisco Packet Tracer</span>
+                <span class="tech-badge">VLAN</span>
+                <span class="tech-badge">Routage</span>
+              </div>
+            </div>
+
+            <!-- PROJET SCOLAIRE S02 — modifiez -->
+            <div class="project-card reveal reveal-delay-1">
+              <div class="project-header">
+                <span class="project-num">S02</span>
+              </div>
+              <div class="project-context">[Formation / Module] · [Année]</div>
+              <h3 class="project-title">[Nom du Projet Scolaire #2]</h3>
+              <div class="project-body">
+                <div class="project-row">
+                  <span class="project-row-label">Problème</span>
+                  <span class="project-row-value">[Problématique pédagogique.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Approche</span>
+                  <span class="project-row-value">[Démarche adoptée.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Acquis</span>
+                  <span class="project-row-value">[Compétences acquises.]</span>
+                </div>
+              </div>
+              <div class="project-tech">
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">Scripting</span>
+                <span class="tech-badge">Automatisation</span>
+              </div>
+            </div>
+
+            <!-- PROJET SCOLAIRE S03 — modifiez -->
+            <div class="project-card reveal reveal-delay-2">
+              <div class="project-header">
+                <span class="project-num">S03</span>
+              </div>
+              <div class="project-context">[Formation / Module] · [Année]</div>
+              <h3 class="project-title">[Nom du Projet Scolaire #3]</h3>
+              <div class="project-body">
+                <div class="project-row">
+                  <span class="project-row-label">Problème</span>
+                  <span class="project-row-value">[Problématique pédagogique.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Approche</span>
+                  <span class="project-row-value">[Démarche adoptée.]</span>
+                </div>
+                <div class="project-row">
+                  <span class="project-row-label">Acquis</span>
+                  <span class="project-row-value">[Compétences acquises.]</span>
+                </div>
+              </div>
+              <div class="project-tech">
+                <span class="tech-badge">Proxmox</span>
+                <span class="tech-badge">Linux</span>
+                <span class="tech-badge">Sécurité</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-copy">© 2026 Elian MARTINOT</div>
+      <ul class="footer-links">
+        <li><a href="homelab.html">Lab →</a></li>
+        <li><a href="contact.html">Contact →</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    function switchTab(e, id) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      e.target.classList.add('active');
+      document.getElementById('tab-' + id).classList.add('active');
+    }
+  </script>
+</body>
+</html>
